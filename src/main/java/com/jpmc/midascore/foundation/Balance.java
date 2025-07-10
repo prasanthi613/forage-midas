@@ -1,28 +1,19 @@
 package com.jpmc.midascore.foundation;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Balance {
-    private float amount;
+    private double balance;
 
-    public Balance() {
+    public Balance(double balance) {
+        this.balance = balance;
     }
 
-    public Balance(float amount) {
-        this.amount = amount;
-    }
-
-    public float getAmount() {
-        return amount;
-    }
-
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public double getBalance() {
+        return balance;
     }
 
     @Override
     public String toString() {
-        return "Balance {amount=" + amount + "}";
+        return "BEGIN_BALANCE:" + balance + ":END_BALANCE";
     }
 }

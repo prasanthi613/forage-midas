@@ -1,5 +1,7 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.MidasCoreApplication;
+import com.jpmc.midascore.kafka.KafkaProducer;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 
-@SpringBootTest
+@SpringBootTest(classes = MidasCoreApplication.class)
 @DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
 class TaskTwoTests {
@@ -26,16 +28,19 @@ class TaskTwoTests {
         for (String transactionLine : transactionLines) {
             kafkaProducer.send(transactionLine);
         }
+
         Thread.sleep(2000);
         logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
         logger.info("use your debugger to watch for incoming transactions");
-        logger.info("kill this test once you find the answer");
-        while (true) {
-            Thread.sleep(20000);
-            logger.info("...");
-        }
-    }
+        logger.info("This test will auto-exit after 10 seconds...");
 
+        int waitSeconds = 10;
+        for (int i = 0; i < waitSeconds; i++) {
+            Thread.sleep(1000);
+            logger.info(".");
+        }
+
+        logger.info("----------------------------------------------------------");
+        logger.info("Test complete. Please check the logs for transaction output.");
+    }
 }

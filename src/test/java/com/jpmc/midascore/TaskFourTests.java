@@ -1,5 +1,9 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.kafka.KafkaProducer;
+import com.jpmc.midascore.model.User;
+import com.jpmc.midascore.repository.UserRepository;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,9 @@ public class TaskFourTests {
     @Autowired
     private FileLoader fileLoader;
 
+    @Autowired
+    private UserRepository userRepository; // Injected UserRepository
+
     @Test
     void task_four_verifier() throws InterruptedException {
         userPopulator.populate();
@@ -32,15 +39,16 @@ public class TaskFourTests {
         }
         Thread.sleep(2000);
 
-
-        logger.info("----------------------------------------------------------");
-        logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");
         logger.info("use your debugger to find out what wilbur's balance is after all transactions are processed");
-        logger.info("kill this test once you find the answer");
+        logger.info("this test will log Wilbur's balance every 20 seconds...");
+        logger.info("----------------------------------------------------------");
+
         while (true) {
             Thread.sleep(20000);
-            logger.info("...");
+            userRepository.findById("wilbur").ifPresent(w -> {
+                logger.info("Wilbur's balance: " + w.getBalance());
+            });
         }
     }
 }
